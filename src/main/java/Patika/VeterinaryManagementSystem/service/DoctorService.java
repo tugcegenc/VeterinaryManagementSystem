@@ -4,6 +4,7 @@ import Patika.VeterinaryManagementSystem.dto.request.DoctorRequest;
 import Patika.VeterinaryManagementSystem.dto.response.DoctorResponse;
 import Patika.VeterinaryManagementSystem.entity.Doctor;
 import Patika.VeterinaryManagementSystem.repository.DoctorRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,16 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final ModelMapper modelMapper;
-
-    public DoctorService(DoctorRepository doctorRepository, ModelMapper modelMapper) {
-        this.doctorRepository = doctorRepository;
-        this.modelMapper = modelMapper;
-    }
-
 
     public Doctor get(Long id) {
         return doctorRepository.findById(id).orElseThrow(() -> new RuntimeException("Doktor bulunamadı. ID: " + id));
@@ -61,7 +57,7 @@ public class DoctorService {
             throw new RuntimeException("Bu doktor bulunamadı.id: " + id);
         } else {
             doctorRepository.delete(doctor.get());
-            return "Doktor silindi.";
+            return "Id: " + id + " doktor silindi.";
         }
     }
 

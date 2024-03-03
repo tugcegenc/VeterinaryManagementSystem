@@ -3,16 +3,14 @@ package Patika.VeterinaryManagementSystem.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -37,8 +35,7 @@ public class Customer {
     @Column(name = "city")
     private String city;
 
-    @OneToMany(mappedBy = "customer" , cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Animal> animalList;
-
 }

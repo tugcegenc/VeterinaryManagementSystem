@@ -6,7 +6,7 @@ import Patika.VeterinaryManagementSystem.entity.Animal;
 import Patika.VeterinaryManagementSystem.entity.Vaccine;
 import Patika.VeterinaryManagementSystem.repository.AnimalRepository;
 import Patika.VeterinaryManagementSystem.repository.VaccineRepository;
-
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,18 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class VaccineService {
 
     private final VaccineRepository vaccineRepository;
     private final AnimalRepository animalRepository;
     private final ModelMapper modelMapper;
-
-    public VaccineService(VaccineRepository vaccineRepository, AnimalRepository animalRepository, ModelMapper modelMapper) {
-        this.vaccineRepository = vaccineRepository;
-        this.animalRepository = animalRepository;
-        this.modelMapper = modelMapper;
-    }
-
 
     public Vaccine get(Long id) {
         return vaccineRepository.findById(id).orElseThrow(() -> new RuntimeException("ID ile aşı bulunamadı: " + id));
@@ -50,12 +44,15 @@ public class VaccineService {
         }
 
         Vaccine newVaccine = modelMapper.map(vaccineRequest, Vaccine.class);
+        if (newVaccine.getProtectionStartDate().isAfter(newVaccine.getProtectionFinishDate())) {
+            throw new RuntimeException("Aşı başlangıç tarihi bitiş tarihinden büyük olamaz.");
+        }
+
         return vaccineRepository.save(newVaccine);
     }
 
-
     public Vaccine update(Long id, VaccineRequest vaccineRequest) {
-        Vaccine vaccine = vaccineRepository.findById(id)
+        Vaccine existingVaccine = vaccineRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ID ile aşı bulunamadı: " + id));
 
         Optional<Vaccine> optionalVaccine = vaccineRepository.findByNameAndCodeAndAnimalIdAndProtectionFinishDateGreaterThanEqual(
@@ -65,8 +62,17 @@ public class VaccineService {
             throw new RuntimeException("Bu aşı zaten kaydedilmiş.");
         }
 
-        modelMapper.map(vaccineRequest, vaccine);
-        return vaccineRepository.save(vaccine);
+        existingVaccine.setName(vaccineRequest.getName());
+        existingVaccine.setCode(vaccineRequest.getCode());
+        existingVaccine.setProtectionStartDate(vaccineRequest.getProtectionStartDate());
+        existingVaccine.setProtectionFinishDate(vaccineRequest.getProtectionFinishDate());
+        if (vaccineRequest.getAnimalId() != null) {
+            Animal animal = animalRepository.findById(vaccineRequest.getAnimalId())
+                    .orElseThrow(() -> new RuntimeException("ID: " + vaccineRequest.getAnimalId() + " ile hayvan bulunamadı!"));
+            existingVaccine.setAnimal(animal);
+        }
+
+        return vaccineRepository.save(existingVaccine);
     }
 
     public String delete(Long id) {
@@ -74,7 +80,7 @@ public class VaccineService {
                 .orElseThrow(() -> new RuntimeException("Bu aşı bulunamadı: " + id));
 
         vaccineRepository.delete(vaccine);
-        return "Aşı silindi.";
+        return "Id: " + id + " aşı silindi.";
     }
 
     public List<Vaccine> findVaccinesByAnimal(Long id) {

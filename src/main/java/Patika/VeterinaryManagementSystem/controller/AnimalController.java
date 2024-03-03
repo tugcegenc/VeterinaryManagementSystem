@@ -23,8 +23,8 @@ public class AnimalController {
 
 
     @PostMapping
-    public ResponseEntity<Animal> save(@RequestBody AnimalRequest animalRequestDto) {
-        Animal savedAnimal = animalService.save(animalRequestDto);
+    public ResponseEntity<Animal> save(@RequestBody AnimalRequest animalRequest) {
+        Animal savedAnimal = animalService.save(animalRequest);
         if (savedAnimal != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(savedAnimal);
         } else {
@@ -74,6 +74,7 @@ public class AnimalController {
         List<Animal> animalList = animalService.findAnimalsByCustomer(id);
         return ResponseEntity.ok().body(animalList);
     }
+
     @GetMapping()
     public Page<AnimalResponse> cursor(Pageable pageable) {
         return animalService.cursor(pageable);

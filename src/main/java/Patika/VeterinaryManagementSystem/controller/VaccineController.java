@@ -4,6 +4,7 @@ import Patika.VeterinaryManagementSystem.dto.request.VaccineRequest;
 import Patika.VeterinaryManagementSystem.dto.response.VaccineResponse;
 import Patika.VeterinaryManagementSystem.entity.Vaccine;
 import Patika.VeterinaryManagementSystem.service.VaccineService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,14 +17,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/vaccines")
+@RequiredArgsConstructor
 public class VaccineController {
 
     private final VaccineService vaccineService;
-
-    public VaccineController(VaccineService vaccineService) {
-        this.vaccineService = vaccineService;
-    }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Vaccine> get(@PathVariable Long id) {

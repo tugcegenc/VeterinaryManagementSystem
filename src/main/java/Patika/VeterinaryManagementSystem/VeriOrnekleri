@@ -1,0 +1,207 @@
+### customers
+    {
+      "name": "John Doe",
+      "phone": "555-123-4567",
+      "email": "johndoe@mail.com",
+      "address": "123 Maple Street",
+      "city": "New York"
+    },
+    {
+      "name": "Jane Smith",
+      "phone": "555-765-4321",
+      "email": "janesmith@mail.com",
+      "address": "456 Oak Street",
+      "city": "Los Angeles"
+    },
+    {
+      "name": "Emily Johnson",
+      "phone": "555-987-6543",
+      "email": "emilyjohnson@mail.com",
+      "address": "789 Pine Street",
+      "city": "Chicago"
+    },
+    {
+      "name": "Michael Brown",
+      "phone": "555-888-1234",
+      "email": "michaelbrown@mail.com",
+      "address": "1011 Cedar Street",
+      "city": "Houston"
+    },
+    {
+      "name": "Linda Davis",
+      "phone": "555-222-3344",
+      "email": "lindadavis@mail.com",
+      "address": "1213 Birch Street",
+      "city": "Phoenix"
+    }
+
+### animals
+    {
+      "name": "Buddy",
+      "species": "Dog",
+      "breed": "Labrador",
+      "gender": "Male",
+      "color": "Yellow",
+      "dateOfBirth": "2018-03-15",
+      "customerId": 1
+    },
+    {
+      "name": "Kitty",
+      "species": "Cat",
+      "breed": "Scottish Fold",
+      "gender": "Female",
+      "color": "Grey",
+      "dateOfBirth": "2020-07-20",
+      "customerId": 2
+    },
+    {
+      "name": "Max",
+      "species": "Dog",
+      "breed": "Golden Retriever",
+      "gender": "Male",
+      "color": "Cream",
+      "dateOfBirth": "2019-05-30",
+      "customerId": 3
+    },
+    {
+      "name": "Cotton",
+      "species": "Cat",
+      "breed": "Van Cat",
+      "gender": "Female",
+      "color": "White",
+      "dateOfBirth": "2021-01-15",
+      "customerId": 4
+    },
+    {
+      "name": "Bead",
+      "species": "Cat",
+      "breed": "Siamese",
+      "gender": "Female",
+      "color": "Brown",
+      "dateOfBirth": "2022-02-10",
+      "customerId": 5
+    }
+
+### vaccines
+    {
+      "name": "Rabies",
+      "code": "RVX100",
+      "protectionStartDate": "2022-01-01",
+      "protectionFinishDate": "2023-01-01",
+      "animalId": 1
+    },
+    {
+      "name": "Feline Leukemia",
+      "code": "FLV200",
+      "protectionStartDate": "2022-02-01",
+      "protectionFinishDate": "2023-02-01",
+      "animalId": 2
+    },
+    {
+      "name": "Canine Parvovirus",
+      "code": "CPV300",
+      "protectionStartDate": "2022-03-01",
+      "protectionFinishDate": "2023-03-01",
+      "animalId": 3
+    },
+    {
+      "name": "Feline Calicivirus",
+      "code": "FCV400",
+      "protectionStartDate": "2022-04-01",
+      "protectionFinishDate": "2023-04-01",
+      "animalId": 4
+    },
+    {
+      "name": "Canine Distemper",
+      "code": "CDV500",
+      "protectionStartDate": "2022-05-01",
+      "protectionFinishDate": "2023-05-01",
+      "animalId": 5
+    }
+
+### doctors
+    {
+      "name": "Dr. Sarah Connor",
+      "phone": "555-112-2345",
+      "email": "sconnor@vetclinic.com",
+      "address": "200 Medical Parkway",
+      "city": "Seattle"
+    },
+    {
+      "name": "Dr. Luke Skywalker",
+      "phone": "555-113-3456",
+      "email": "lskywalker@vetclinic.com",
+      "address": "201 Medical Parkway",
+      "city": "Austin"
+    },
+    {
+      "name": "Dr. Dana Scully",
+      "phone": "555-114-4567",
+      "email": "dscully@vetclinic.com",
+      "address": "202 Medical Parkway",
+      "city": "Denver"
+    },
+    {
+      "name": "Dr. Fox Mulder",
+      "phone": "555-115-5678",
+      "email": "fmulder@vetclinic.com",
+      "address": "203 Medical Parkway",
+      "city": "Boston"
+    },
+    {
+      "name": "Dr. Jean Grey",
+      "phone": "555-116-6789",
+      "email": "jgrey@vetclinic.com",
+      "address": "204 Medical Parkway",
+      "city": "San Francisco"
+    }
+
+### available_dates
+    {
+      "availableDate": "2023-09-01",
+      "doctorId": 1
+    },
+    {
+      "availableDate": "2023-09-02",
+      "doctorId": 2
+    },
+    {
+      "availableDate": "2023-09-03",
+      "doctorId": 3
+    },
+    {
+      "availableDate": "2023-09-04",
+      "doctorId": 4
+    },
+    {
+      "availableDate": "2023-09-05",
+      "doctorId": 5
+    }
+
+### appointments
+    {
+      "appointmentDate": "2023-09-01T10:00:00",
+      "animalId": 1,
+      "doctorId": 1
+    },
+    {
+      "appointmentDate": "2023-09-02T11:00:00",
+      "animalId": 2,
+      "doctorId": 2
+    },
+    {
+      "appointmentDate": "2023-09-03T14:00:00",
+      "animalId": 3,
+      "doctorId": 3
+    },
+    {
+      "appointmentDate": "2023-09-04T09:00:00",
+      "animalId": 4,
+      "doctorId": 4
+    },
+    {
+      "appointmentDate": "2023-09-05T15:00:00",
+      "animalId": 5,
+      "doctorId": 5
+    }
+

@@ -1,21 +1,18 @@
 package Patika.VeterinaryManagementSystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "animal")
-
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +42,10 @@ public class Animal {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "animal",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "animal", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Vaccine> vaccineList;
 
-    @OneToMany(mappedBy = "animal",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "animal", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    // @JsonIgnore
     private List<Appointment> appointmentList;
-
 }

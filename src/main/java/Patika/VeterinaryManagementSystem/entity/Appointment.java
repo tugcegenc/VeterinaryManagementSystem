@@ -1,5 +1,6 @@
 package Patika.VeterinaryManagementSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "serial",nullable = false)
+    @Column(name = "id", columnDefinition = "serial")
     private Long id;
 
     @Column(name = "appointment_date")
@@ -28,9 +29,7 @@ public class Appointment {
     private Doctor doctor;
 
     @ManyToOne (fetch = FetchType.EAGER)
-    //@JsonIgnore
     @JoinColumn (name = "animal_id")
+    @JsonIgnore
     private Animal animal;
-
-
 }

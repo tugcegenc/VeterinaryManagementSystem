@@ -3,13 +3,12 @@ package Patika.VeterinaryManagementSystem.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -42,7 +41,7 @@ public class Doctor {
     @JsonIgnore
     private List<Appointment> appointmentList;
 
-    @OneToMany(mappedBy = "doctor" ,fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<AvailableDate> availableDateList;
 

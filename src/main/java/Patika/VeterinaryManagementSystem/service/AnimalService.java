@@ -3,7 +3,9 @@ package Patika.VeterinaryManagementSystem.service;
 import Patika.VeterinaryManagementSystem.dto.request.AnimalRequest;
 import Patika.VeterinaryManagementSystem.dto.response.AnimalResponse;
 import Patika.VeterinaryManagementSystem.entity.Animal;
+import Patika.VeterinaryManagementSystem.entity.Customer;
 import Patika.VeterinaryManagementSystem.repository.AnimalRepository;
+import Patika.VeterinaryManagementSystem.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -18,26 +20,36 @@ import java.util.Optional;
 public class AnimalService {
 
     private final AnimalRepository animalRepository;
+    private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
 
-
     public Animal get(Long id) {
-        return animalRepository.findById(id).orElseThrow(() -> new RuntimeException("ID: " + id + " ile hayvan bulunamadı!"));
+        return animalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ID: " + id + " ile hayvan bulunamadı!"));
     }
 
     public Animal save(AnimalRequest animalRequest) {
-        Optional<Animal> animal = animalRepository.findByNameAndSpeciesAndGenderAndDateOfBirth(
+        if (animalRequest.getCustomerId() == null) {
+            throw new IllegalArgumentException("Hayvanı kaydederken bir müşteri ID'si sağlanmalıdır.");
+        }
+
+        Optional<Animal> existingAnimal = animalRepository.findByNameAndSpeciesAndGenderAndDateOfBirth(
                 animalRequest.getName(),
                 animalRequest.getSpecies(),
                 animalRequest.getGender(),
                 animalRequest.getDateOfBirth()
         );
 
-        if (animal.isPresent()) {
+        if (existingAnimal.isPresent()) {
             throw new RuntimeException("Bu özelliklere sahip bir hayvan zaten kayıtlı.");
         }
 
+        Customer customer = customerRepository.findById(animalRequest.getCustomerId())
+                .orElseThrow(() -> new RuntimeException("ID: " + animalRequest.getCustomerId() + " ile müşteri bulunamadı!"));
+
         Animal newAnimal = modelMapper.map(animalRequest, Animal.class);
+        newAnimal.setCustomer(customer);
+        newAnimal.setId(null);
         return animalRepository.save(newAnimal);
     }
 
@@ -45,11 +57,19 @@ public class AnimalService {
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ID: " + id + " ile hayvan bulunamadı!"));
 
-       /* if (!animal.getCustomer().getId().equals(animalRequest.getCustomerId())) {
-            throw new RuntimeException("Hayvanın sahibi değiştirilemez.");
-        }*/
+        animal.setName(animalRequest.getName());
+        animal.setSpecies(animalRequest.getSpecies());
+        animal.setBreed(animalRequest.getBreed());
+        animal.setGender(animalRequest.getGender());
+        animal.setColour(animalRequest.getColour());
+        animal.setDateOfBirth(animalRequest.getDateOfBirth());
+        if (animalRequest.getCustomerId() != null) {
+            Customer customer = customerRepository.findById(animalRequest.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException("ID: " + animalRequest.getCustomerId() + " ile müşteri bulunamadı!"));
+            animal.setCustomer(customer);
+        }
 
-        modelMapper.map(animalRequest, animal);
+
         return animalRepository.save(animal);
     }
 
@@ -58,7 +78,7 @@ public class AnimalService {
                 .orElseThrow(() -> new RuntimeException("ID: " + id + " ile hayvan bulunamadı!"));
 
         animalRepository.delete(animal);
-        return "Hayvan silindi.";
+        return "id: " + id + " hayvan silindi.";
     }
 
     public List<Animal> findAllAnimals() {

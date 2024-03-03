@@ -4,6 +4,7 @@ import Patika.VeterinaryManagementSystem.dto.request.AvailableDateRequest;
 import Patika.VeterinaryManagementSystem.dto.response.AvailableDateResponse;
 import Patika.VeterinaryManagementSystem.entity.AvailableDate;
 import Patika.VeterinaryManagementSystem.service.AvailableDateService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/available_dates")
+@RequiredArgsConstructor
 public class AvailableDateController {
 
     public final AvailableDateService availableDateService;
-
-    public AvailableDateController(AvailableDateService availableDateService) {
-        this.availableDateService = availableDateService;
-    }
 
     @GetMapping("/all")
     public List<AvailableDate> findAllAvailableDates() {

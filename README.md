@@ -6,14 +6,14 @@ Java Spring Boot
 
 Spring Data JPA
 
-PostgreSQL veya MySQL (veritabanı olarak kullanılabilir)
+PostgreSQL
 
 Spring Web   
 
 ### Ana Özellikler
 Doktor Yönetimi: Doktorlar kaydedilebilir, güncellenebilir, silinebilir ve listelenebilir.
 
-Müsaitlik Takvimi: Doktorların müsaitlik tarihleri kaydedilebilir ve yönetilebilir.
+Müsaitlik Takvimi: Doktorların müsaitlik tarihleri kaydedilebili, güncellenebilir, silinebilir ve listelenebilir.
 
 Hayvan Sahibi Yönetimi: Müşteriler kaydedilebilir, güncellenebilir, silinebilir ve listelenebilir.
 
@@ -21,12 +21,14 @@ Hayvan Yönetimi: Hayvanlar kaydedilebilir, güncellenebilir, silinebilir ve lis
 
 Aşı Yönetimi: Hayvanlara uygulanan aşılar kaydedilebilir, güncellenebilir, silinebilir ve listelenebilir.
 
-Randevu Yönetimi: Hayvanlar için randevular oluşturulabilir, güncellenebilir, silinebilir ve listelenebilir.
+Randevu Yönetimi: Hayvanlar için randevular oluşturulabilir, güncellenebilir, silinebilir ve listelenebilir. 
+
+Filtreleme işlemleri yapılabilir.
 
 ### UML Diyagram
 Aşağıda, sistemin temel bileşenleri ve aralarındaki ilişkileri gösteren UML diyagramı yer almaktadır:
 
-![UML.png](UML.png)
+![UML.png](src/main/java/Patika/VeterinaryManagementSystem/UML.png)
 
 ### API Kullanımı ve Endpoint Listesi
 Sistemin API endpoint'leri ve bunların kullanımı aşağıda yer alan görselde detaylandırılmıştır:

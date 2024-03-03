@@ -6,6 +6,7 @@ import Patika.VeterinaryManagementSystem.entity.AvailableDate;
 import Patika.VeterinaryManagementSystem.entity.Doctor;
 import Patika.VeterinaryManagementSystem.repository.AvailableDateRepository;
 import Patika.VeterinaryManagementSystem.repository.DoctorRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,16 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AvailableDateService {
     private final AvailableDateRepository availableDateRepository;
     private final DoctorRepository doctorRepository;
     private final ModelMapper modelMapper;
-
-    public AvailableDateService(AvailableDateRepository availableDateRepository, DoctorRepository doctorRepository, ModelMapper modelMapper) {
-        this.availableDateRepository = availableDateRepository;
-        this.doctorRepository = doctorRepository;
-        this.modelMapper = modelMapper;
-    }
 
     public List<AvailableDate> findAllAvailableDates() {
         return availableDateRepository.findAll();
@@ -62,17 +58,25 @@ public class AvailableDateService {
             throw new RuntimeException("Bu müsait tarih zaten kayıtlı.");
         }
 
-        modelMapper.map(availableDateRequest, existingAvailableDate);
+        existingAvailableDate.setAvailableDate(availableDateRequest.getAvailableDate());
+        if (availableDateRequest.getDoctorId() != null) {
+            Doctor doctor = doctorRepository.findById(availableDateRequest.getDoctorId())
+                    .orElseThrow(() -> new RuntimeException("ID: " + availableDateRequest.getDoctorId() + " ile doktor bulunamadı!"));
+            existingAvailableDate.setDoctor(doctor);
+        }
+
         return availableDateRepository.save(existingAvailableDate);
     }
+
 
     public String delete(Long id) {
         AvailableDate availableDate = availableDateRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(id + " id ile ilgili müsait tarih bulunamadı."));
 
         availableDateRepository.delete(availableDate);
-        return "Müsait tarih silindi.";
+        return "Id: " + id + " müsait tarih silindi.";
     }
+
     public Page<AvailableDateResponse> cursor(Pageable pageable) {
         Page<AvailableDate> availableDates = availableDateRepository.findAll(pageable);
         return availableDates.map(availableDate -> modelMapper.map(availableDate, AvailableDateResponse.class));

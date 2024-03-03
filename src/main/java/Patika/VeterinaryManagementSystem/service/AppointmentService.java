@@ -9,6 +9,7 @@ import Patika.VeterinaryManagementSystem.entity.Doctor;
 import Patika.VeterinaryManagementSystem.repository.AnimalRepository;
 import Patika.VeterinaryManagementSystem.repository.AppointmentRepository;
 import Patika.VeterinaryManagementSystem.repository.DoctorRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -30,38 +32,27 @@ public class AppointmentService {
     private final AvailableDateService availableDateService;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public AppointmentService(AppointmentRepository appointmentRepository, AnimalRepository animalRepository, DoctorRepository doctorRepository, AvailableDateService availableDateService, ModelMapper modelMapper) {
-        this.appointmentRepository = appointmentRepository;
-        this.animalRepository = animalRepository;
-        this.doctorRepository = doctorRepository;
-        this.availableDateService = availableDateService;
-        this.modelMapper = modelMapper;
-    }
-
     public Appointment get(Long id) {
         return appointmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Randevu bulunamadı. ID: " + id));
     }
 
     @Transactional
     public Appointment save(AppointmentRequest appointmentRequest) {
-        // Doktor ve hayvan nesnelerini çekme
         Doctor doctor = findDoctorById(appointmentRequest.getDoctorId());
         Animal animal = findAnimalById(appointmentRequest.getAnimalId());
 
-        // Appointment nesnesini oluşturma ve doktor/hayvan bilgilerini atama
         Appointment appointment = modelMapper.map(appointmentRequest, Appointment.class);
         appointment.setDoctor(doctor);
         appointment.setAnimal(animal);
 
         LocalDateTime newAppointmentStart = appointmentRequest.getDate();
-        LocalDateTime newAppointmentEnd = newAppointmentStart.plusHours(1);
+        LocalDateTime newAppointmentEnd = newAppointmentStart.plusMinutes(59).plusSeconds(59);
 
         List<Appointment> existingAppointments = appointmentRepository.findByDoctorId(appointmentRequest.getDoctorId());
 
         for (Appointment existingAppointment : existingAppointments) {
             LocalDateTime existingAppointmentStart = existingAppointment.getDate();
-            LocalDateTime existingAppointmentEnd = existingAppointmentStart.plusHours(1);
+            LocalDateTime existingAppointmentEnd = existingAppointmentStart.plusMinutes(59).plusSeconds(59);
             if (!newAppointmentStart.isAfter(existingAppointmentEnd) && !newAppointmentEnd.isBefore(existingAppointmentStart)) {
                 throw new RuntimeException("Doktorun şu anda başka bir randevusu var.");
             }
@@ -74,8 +65,6 @@ public class AppointmentService {
         if (existsAvailableDateByDoctorIdAndDate.isEmpty()) {
             throw new RuntimeException("Doktor bu gün çalışmıyor.");
         }
-
-        // animalId alanının kontrolü ve atanması
         if (appointmentRequest.getAnimalId() == null) {
             throw new RuntimeException("Randevu için bir hayvan seçilmemiş.");
         }
@@ -84,13 +73,11 @@ public class AppointmentService {
     }
 
     private Doctor findDoctorById(Long doctorId) {
-        // Veritabanından doctorId ile doktoru çek
         Optional<Doctor> optionalDoctor = doctorRepository.findById(doctorId);
         return optionalDoctor.orElseThrow(() -> new RuntimeException("Doktor bulunamadı. ID: " + doctorId));
     }
 
     private Animal findAnimalById(Long animalId) {
-        // Veritabanından animalId ile hayvanı çek
         Optional<Animal> optionalAnimal = animalRepository.findById(animalId);
         return optionalAnimal.orElseThrow(() -> new RuntimeException("Hayvan bulunamadı. ID: " + animalId));
     }
@@ -99,7 +86,18 @@ public class AppointmentService {
     public Appointment update(Long id, AppointmentRequest appointmentRequest) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Randevu bulunamadı. ID: " + id));
+        LocalDateTime newAppointmentStart = appointmentRequest.getDate();
+        LocalDateTime newAppointmentEnd = newAppointmentStart.plusMinutes(59).plusSeconds(59);
 
+        List<Appointment> existingAppointments = appointmentRepository.findByDoctorId(appointmentRequest.getDoctorId());
+
+        for (Appointment existingAppointment : existingAppointments) {
+            LocalDateTime existingAppointmentStart = existingAppointment.getDate();
+            LocalDateTime existingAppointmentEnd = existingAppointmentStart.plusMinutes(59).plusSeconds(59);
+            if (!newAppointmentStart.isAfter(existingAppointmentEnd) && !newAppointmentEnd.isBefore(existingAppointmentStart)) {
+                throw new RuntimeException("Doktorun şu anda başka bir randevusu var.");
+            }
+        }
         Optional<Appointment> optionalAppointment = appointmentRepository.findByDateAndDoctorIdAndAnimalId(
                 appointmentRequest.getDate(), appointmentRequest.getDoctorId(), appointmentRequest.getAnimalId());
 
@@ -114,7 +112,16 @@ public class AppointmentService {
             throw new RuntimeException("Doktor bu gün çalışmıyor.");
         }
 
-        modelMapper.map(appointmentRequest, appointment);
+        appointment.setDate(appointmentRequest.getDate());
+        if (appointmentRequest.getDoctorId() != null && appointmentRequest.getAnimalId() != null) {
+            Doctor doctor = doctorRepository.findById(appointmentRequest.getDoctorId())
+                    .orElseThrow(() -> new RuntimeException("ID: " + appointmentRequest.getDoctorId() + " ile doktor bulunamadı!"));
+            appointment.setDoctor(doctor);
+
+            Animal animal = animalRepository.findById(appointmentRequest.getAnimalId())
+                    .orElseThrow(() -> new RuntimeException("ID: " + appointmentRequest.getAnimalId() + " ile hayvan bulunamadı!"));
+            appointment.setAnimal(animal);
+        }
         return appointmentRepository.save(appointment);
     }
 
@@ -124,7 +131,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new RuntimeException("Bu randevu bulunamadı."));
 
         appointmentRepository.delete(appointment);
-        return "Randevu silindi.";
+        return "Id: " + id + " randevu silindi.";
     }
 
     public List<Appointment> findAppointmentByDoctorIdAndDate(Long doctorId, LocalDate startDate, LocalDate endDate) {

@@ -4,6 +4,7 @@ import Patika.VeterinaryManagementSystem.dto.request.CustomerRequest;
 import Patika.VeterinaryManagementSystem.dto.response.CustomerResponse;
 import Patika.VeterinaryManagementSystem.entity.Customer;
 import Patika.VeterinaryManagementSystem.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customers")
+@RequiredArgsConstructor
 
 public class CustomerController {
 
     public final CustomerService customerService;
-
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
 
 
     @PostMapping

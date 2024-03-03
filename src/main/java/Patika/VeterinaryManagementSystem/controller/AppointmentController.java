@@ -4,6 +4,7 @@ import Patika.VeterinaryManagementSystem.dto.request.AppointmentRequest;
 import Patika.VeterinaryManagementSystem.dto.response.AppointmentResponse;
 import Patika.VeterinaryManagementSystem.entity.Appointment;
 import Patika.VeterinaryManagementSystem.service.AppointmentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,13 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/appointments")
+@RequiredArgsConstructor
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
-
-    public AppointmentController(AppointmentService appointmentService) {
-        this.appointmentService = appointmentService;
-    }
 
 
     @GetMapping("/{id}")

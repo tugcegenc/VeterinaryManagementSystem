@@ -4,6 +4,7 @@ import Patika.VeterinaryManagementSystem.dto.request.CustomerRequest;
 import Patika.VeterinaryManagementSystem.dto.response.CustomerResponse;
 import Patika.VeterinaryManagementSystem.entity.Customer;
 import Patika.VeterinaryManagementSystem.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,15 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
-
-    public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper) {
-        this.customerRepository = customerRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Transactional
     public Customer save(CustomerRequest customerRequest) {
@@ -53,7 +50,7 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Müşteri ID ile bulunamadı: " + id));
 
         customerRepository.delete(customer);
-        return "Müşteri silindi: " + id;
+        return "Id: " + id + "Müşteri silindi: ";
     }
 
     public List<Customer> findAllCustomers() {

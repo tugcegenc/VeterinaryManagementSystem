@@ -1,6 +1,7 @@
 package Patika.VeterinaryManagementSystem.dto.request;
 
 import Patika.VeterinaryManagementSystem.entity.Appointment;
+import Patika.VeterinaryManagementSystem.entity.Customer;
 import Patika.VeterinaryManagementSystem.entity.Vaccine;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class AnimalRequest {
     private LocalDate dateOfBirth;
     private List<Vaccine> vaccineList;
     private List<Appointment> appointmentList;
+    private Customer customer;
 
 
 }

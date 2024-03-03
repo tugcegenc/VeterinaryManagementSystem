@@ -33,7 +33,7 @@ Aşağıda, sistemin temel bileşenleri ve aralarındaki ilişkileri gösteren U
 ### API Kullanımı ve Endpoint Listesi
 Sistemin API endpoint'leri ve bunların kullanımı aşağıda yer alan görselde detaylandırılmıştır:
 
-![Endpoint.png](Endpoint.png)
+![Endpoint.png](src/main/java/Patika/VeterinaryManagementSystem/Endpoint.png)
 
 ### Uygulama Başlatma Adımları
 
